@@ -27,13 +27,13 @@
   <div class="collapse navbar-collapse" id="collapsibleNavbar">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="#">Home</a>
+        <a class="nav-link" href="/">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Sign in</a>
+        <a class="nav-link" href="/user/sign-in">Sign in</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Sign up</a>
+        <a class="nav-link" href="/user/sign-up">Sign up</a>
       </li>    
     </ul>
   </div>  
@@ -50,19 +50,19 @@
       <p>Lorem ipsum dolor sit ame.</p>
       <ul class="nav nav-pills flex-column">
         <li class="nav-item">
-          <a class="nav-link" href="#">계좌생성</a>
+          <a class="nav-link" href="/account/save">계좌생성</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">계좌목록</a>
+          <a class="nav-link" href="/account/list">계좌목록</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">출금</a>
+          <a class="nav-link" href="/account/withdraw">출금</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">입금</a>
+          <a class="nav-link" href="/account/deposit">입금</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">계좌이체</a>
+          <a class="nav-link" href="/account/transfer">계좌이체</a>
         </li>
       </ul>
       <hr class="d-sm-none">
