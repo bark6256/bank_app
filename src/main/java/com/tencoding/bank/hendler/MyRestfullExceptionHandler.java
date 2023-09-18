@@ -1,5 +1,6 @@
 package com.tencoding.bank.hendler;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -10,13 +11,14 @@ import com.tencoding.bank.hendler.exception.CustomRestfullException;
  * 데이터를 가공해서 내려 줄 수 있다.
  */
 @RestControllerAdvice
+@Order(1)
 public class MyRestfullExceptionHandler {
 	
 	@ExceptionHandler(Exception.class)
 	public void exception(Exception e) {
-		System.out.println("=============== 예외 발생 =============");
+		System.out.println("=============== restfull 예외 발생 =============");
 		System.out.println(e.getMessage());
-		System.out.println("=======================================");
+		System.out.println("================================================");
 	}
 	
 	@ExceptionHandler(CustomRestfullException.class)
