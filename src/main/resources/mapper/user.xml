@@ -13,19 +13,26 @@
 		   set username = #{username}
 			 , password = #{password}
 		     , fullname = #{fullname}
-		 where id = #{id}
+		 where id = "#{id}"
 	</update>
 	
 	<delete id="deleteById">
 		delete
 		  from user_tb
-		 where id = ${id}
+		 where id = #{id}
 	</delete>
 	
 	<select id="findById" resultType="com.tencoding.bank.repository.model.User">
 		select id, username, password, fullname, created_at
           from user_tb
-		 where id = ${id}
+		 where id = #{id}
+	</select>
+	
+	<select id="findByUsernameAndPassword" resultType="com.tencoding.bank.repository.model.User">
+		select id, username, password, fullname, created_at
+		  from user_tb
+		 where username = #{username}
+		   and password = #{password}
 	</select>
 	
 	<select id="findAll">

@@ -7,16 +7,16 @@
 	<h2>로그인</h2>
 	<h5>어서오세요 환영합니다</h5>
 	<div class="bg-light p-md-5 h-75">
-		<form action="/user/signin-proc" method="post">
+		<form action="/user/sign-in" method="post">
 			<div class="form-group">
 				<label for="username">Username:</label>
 				<input type="text" class="form-control" placeholder="Enter username"
-				        id="username" name="username">
+				        id="username" name="username" value="aaaa">
 			</div>
 			<div class="form-group">
 				<label for="pwd">Password:</label>
 				<input type="password" class="form-control" placeholder="Enter password"
-				        id="pwd" name="password">
+				        id="pwd" name="password" value="1234">
 			</div>
 			<button type="submit" class="btn btn-primary">Login</button>
 		</form>

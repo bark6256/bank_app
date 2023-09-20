@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.tencoding.bank.dto.AccountSaveFormDto;
 import com.tencoding.bank.repository.model.Account;
 
 @Mapper
@@ -15,7 +16,7 @@ public interface AccountRepository {
 	public Account findById(Integer id);
 	public List<Account> findAll();
 	
-	public List<Account> findByUserId(Integer principalid);
+	public List<Account> findByUserId(Integer userId);
 	
 	public Account findByNumber(String number); // 계좌 번호로 검색
 }

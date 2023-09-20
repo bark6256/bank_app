@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.tencoding.bank.hendler.exception.CustomRestfullException;
+import com.tencoding.bank.hendler.exception.UnAuthorizedException;
 
 /**
  * 예외 발생 시 (Json, XML)
@@ -26,6 +27,16 @@ public class MyRestfullExceptionHandler {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<script>");
 		sb.append("alert('오류 발생 : " + e.getMessage() + "');");
+		sb.append("history.back();");
+		sb.append("</script>");
+		return sb.toString();
+	}
+	
+	@ExceptionHandler(UnAuthorizedException.class)
+	public String notLoginException(UnAuthorizedException e) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<script>");
+		sb.append("alert('" + e.getMessage() + "');");
 		sb.append("history.back();");
 		sb.append("</script>");
 		return sb.toString();

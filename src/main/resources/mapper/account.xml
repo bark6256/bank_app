@@ -34,13 +34,13 @@
 		  from account_tb
 	</select>
 
-	<select id="findByUserId">
+	<select id="findByUserId" resultType="com.tencoding.bank.repository.model.Account">
 		select id, number, password, balance, user_id, created_at
 		  from account_tb
 		 where user_id = #{userId}
 	</select>
 	
-	<select id="findByNumber">
+	<select id="findByNumber" resultType="com.tencoding.bank.repository.model.Account">
 		select id, number, password, balance, user_id, created_at
 		  from account_tb
 		 where number = #{number}

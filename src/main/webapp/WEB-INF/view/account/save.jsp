@@ -4,7 +4,7 @@
 <div class="col-sm-8">
 	<h2>계좌 생성 (인증)</h2>
 	<div class="bg-light p-md-5 h-75">
-		<form action="" method="post">
+		<form action="/account/save" method="post">
 			<div class="form-group">
 				<label for="number">계좌 번호:</label>
 				<input type="text" class="form-control" placeholder="계좌 번호"

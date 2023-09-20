@@ -4,7 +4,7 @@
 <div class="col-sm-8">
 	<h2>출금 (인증)</h2>
 	<div class="bg-light p-md-5 h-75">
-		<form action="" method="post">
+		<form action="/account/withdraw" method="post">
 			<div class="form-group">
 				<label for="amount">출금 금액 (원):</label>
 				<input type="number" class="form-control" placeholder="출금 금액"
