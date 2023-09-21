@@ -23,7 +23,7 @@
 		 where id = #{id}
 	</delete>
 	
-	<select id="findById">
+	<select id="findById" resultType="com.tencoding.bank.repository.model.Account">
 		select id, number, password, balance, user_id, created_at
 		  from account_tb
 		 where id = #{id}

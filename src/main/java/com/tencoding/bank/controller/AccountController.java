@@ -9,11 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tencoding.bank.dto.AccountSaveFormDto;
 import com.tencoding.bank.dto.DepositFormDto;
+import com.tencoding.bank.dto.HistoryDto;
+import com.tencoding.bank.dto.TransferFormDto;
 import com.tencoding.bank.dto.WithdrawFormDto;
 import com.tencoding.bank.hendler.exception.CustomRestfullException;
 import com.tencoding.bank.hendler.exception.UnAuthorizedException;
@@ -68,24 +72,24 @@ public class AccountController {
 	 * @param accountSaveFormDto
 	 */
 	@PostMapping("/save")
-	public String saveProc(AccountSaveFormDto dto) {
+	public String saveProc(AccountSaveFormDto accountSaveFormDto) {
 		// 1. 인증 여부 확인
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
 		if(principal == null) {
 			throw new UnAuthorizedException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
 		}
 		// 2. 유효성 검사
-		if(dto.getNumber() == null || dto.getNumber().isEmpty()) {
+		if(accountSaveFormDto.getNumber() == null || accountSaveFormDto.getNumber().isEmpty()) {
 			throw new CustomRestfullException("계좌 번호를 입력해 주세요", HttpStatus.BAD_REQUEST);
 		}
-		if(dto.getPassword() == null || dto.getPassword().isEmpty()) {
+		if(accountSaveFormDto.getPassword() == null || accountSaveFormDto.getPassword().isEmpty()) {
 			throw new CustomRestfullException("비밀 번호를 입력해 주세요", HttpStatus.BAD_REQUEST);
 		}
-		if(dto.getBalance() == null || dto.getBalance() < 0) {
+		if(accountSaveFormDto.getBalance() == null || accountSaveFormDto.getBalance() < 0) {
 			throw new CustomRestfullException("잘못된 입력입니다", HttpStatus.BAD_REQUEST);
 		}
 		
-		accountService.saveService(dto, principal.getId());
+		accountService.saveService(accountSaveFormDto, principal.getId());
 		return "redirect:/account/list";
 	}
 	
@@ -103,30 +107,30 @@ public class AccountController {
 	
 	/**
 	 * 출금 기능 구현
-	 * @param dto
+	 * @param withdrawFormDto
 	 */
 	@PostMapping("/withdraw")
-	public String withdrawProc(WithdrawFormDto dto) {
+	public String withdrawProc(WithdrawFormDto withdrawFormDto) {
 		// 1. 인증 여부 확인
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
 		if(principal == null) {
 			throw new UnAuthorizedException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
 		}
 		// 2. 유효성 검사
-		if(dto.getAmount() == null) {
+		if(withdrawFormDto.getAmount() == null) {
 			throw new CustomRestfullException("금액을 입력해야 합니다", HttpStatus.BAD_REQUEST);
 		}
-		if(dto.getAmount() <= 0) {
+		if(withdrawFormDto.getAmount() <= 0) {
 			throw new CustomRestfullException("0원 이하일 수 없습니다", HttpStatus.BAD_REQUEST);
 		}
-		if(dto.getWAccountNumber() == null || dto.getWAccountNumber().isEmpty()) {
+		if(withdrawFormDto.getWAccountNumber() == null || withdrawFormDto.getWAccountNumber().isEmpty()) {
 			throw new CustomRestfullException("출금 계좌 번호를 입력해 주세요", HttpStatus.BAD_REQUEST);
 		}
-		if(dto.getWAccountPassword() == null || dto.getWAccountPassword().isEmpty()) {
+		if(withdrawFormDto.getWAccountPassword() == null || withdrawFormDto.getWAccountPassword().isEmpty()) {
 			throw new CustomRestfullException("출금 계좌 비밀 번호를 입력해 주세요", HttpStatus.BAD_REQUEST);
 		}
 		
-		accountService.updateAccountWithdarw(dto, principal.getId());
+		accountService.updateAccountWithdarw(withdrawFormDto, principal.getId());
 		
 		return "redirect:/account/list";
 	}
@@ -154,27 +158,27 @@ public class AccountController {
 
 	/**
 	 * 입금 기능 구현
-	 * @param dto
+	 * @param depositFormDto
 	 */
 	@PostMapping("/deposit")
-	public String depositProc(DepositFormDto dto) {
+	public String depositProc(DepositFormDto depositFormDto) {
 		// 1. 인증 여부 확인
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
 		if(principal == null) {
 			throw new UnAuthorizedException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
 		}
 		// 2. 유효성 검사
-		if(dto.getAmount() == null) {
+		if(depositFormDto.getAmount() == null) {
 			throw new CustomRestfullException("금액을 입력해야 합니다", HttpStatus.BAD_REQUEST);
 		}
-		if(dto.getAmount() <= 0) {
+		if(depositFormDto.getAmount() <= 0) {
 			throw new CustomRestfullException("0원 이하일 수 없습니다", HttpStatus.BAD_REQUEST);
 		}
-		if(dto.getDAccountNumber() == null || dto.getDAccountNumber().isEmpty()) {
+		if(depositFormDto.getDAccountNumber() == null || depositFormDto.getDAccountNumber().isEmpty()) {
 			throw new CustomRestfullException("입금 계좌 번호를 입력해 주세요", HttpStatus.BAD_REQUEST);
 		}
 		
-		accountService.updateAccountDeposit(dto);
+		accountService.updateAccountDeposit(depositFormDto);
 		
 		return "redirect:/account/list";
 	}
@@ -182,15 +186,66 @@ public class AccountController {
 	// http://localhost:80/account/transfer
 	@GetMapping("/transfer")
 	public String transfer() {
+		// 1. 인증 여부 확인
+		User principal = (User) session.getAttribute(Define.PRINCIPAL);
+		if(principal == null) {
+			throw new UnAuthorizedException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
+		}
 		return "account/transfer";
 	}
 	
-	
+	@PostMapping("/transfer")
+	public String transferProc(TransferFormDto transferFormDto) {
+		// 1. 인증 여부 확인
+		User principal = (User) session.getAttribute(Define.PRINCIPAL);
+		if(principal == null) {
+			throw new UnAuthorizedException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
+		}
+		// 2. 유효성 검사
+		if(transferFormDto.getAmount() == null) {
+			throw new CustomRestfullException("금액을 입력해야 합니다", HttpStatus.BAD_REQUEST);
+		}
+		if(transferFormDto.getAmount() <= 0) {
+			throw new CustomRestfullException("0원 이하일 수 없습니다", HttpStatus.BAD_REQUEST);
+		}
+		if(transferFormDto.getWAccountNumber() == null || transferFormDto.getWAccountNumber().isEmpty()) {
+			throw new CustomRestfullException("출금 계좌 번호를 입력해 주세요", HttpStatus.BAD_REQUEST);
+		}
+		if(transferFormDto.getWAccountPassword() == null || transferFormDto.getWAccountPassword().isEmpty()) {
+			throw new CustomRestfullException("출금 계좌 비밀 번호를 입력해 주세요", HttpStatus.BAD_REQUEST);
+		}
+		if(transferFormDto.getDAccountNumber() == null || transferFormDto.getDAccountNumber().isEmpty()) {
+			throw new CustomRestfullException("이체 계좌 번호를 입력해 주세요", HttpStatus.BAD_REQUEST);
+		}
+		
+		accountService.updateAccountTransfer(transferFormDto, principal.getId());
+		
+		return "redirect:/account/list";
+	}
 	
 	// 상세 보기 페이지
-	// http://localhost:80/account/detail
-	@GetMapping("/detail")
-	public String detail() {
+	// http://localhost:80/account/detail/{accountId}?type=(all, deposit, withdraw)
+	@GetMapping("/detail/{id}")
+	public String detail(@PathVariable Integer id, @RequestParam(name = "type", defaultValue = "all", required = false) String type,
+			Model model) {
+		// 1. 인증 여부 확인
+		User principal = (User) session.getAttribute(Define.PRINCIPAL);
+		if(principal == null) {
+			throw new UnAuthorizedException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
+		}
+		
+		// 서비스 호출
+		// 계좌 정보 호출
+		Account account = accountService.readAccount(id);
+		// 계좌가 본인 계좌인지 확인
+		if(account.getUserId() != principal.getId()) {
+			throw new CustomRestfullException("자신의 계좌가 아닙니다", HttpStatus.BAD_REQUEST);
+		}
+		List<HistoryDto> historyList = accountService.readHistoryListByAccount(account.getUserId(), type);
+		model.addAttribute("principal", principal);
+		model.addAttribute("account", account);
+		model.addAttribute("historyList", historyList);
+		System.out.println(historyList);
 		return "account/detail";
 	}
 }
