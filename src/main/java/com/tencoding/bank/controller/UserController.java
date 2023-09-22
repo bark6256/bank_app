@@ -39,7 +39,7 @@ public class UserController {
 	@PostMapping("/sign-up")
 	public String signUpProc(SignUpFormDto dto) {
 		System.out.println(dto.toString());
-		// 1. 유효성 검사
+		// 유효성 검사
 		if(dto.getUsername() == null
 				|| dto.getUsername().isEmpty()) {
 			throw new CustomRestfullException("username을 입력하세요"
@@ -55,10 +55,8 @@ public class UserController {
 			throw new CustomRestfullException("fullname을 입력하세요"
 					, HttpStatus.BAD_REQUEST);
 		}
-		// 2. 이미지 처리
-		// 3. 서비스 호출
 		userService.signUpService(dto);
-		// 4. 정상처리 완료시 - 리다이랙트
+		// 정상처리 완료시 - 리다이랙트
 		return "redirect:/user/sign-in";
 	}
 	

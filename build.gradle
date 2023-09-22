@@ -35,6 +35,9 @@ dependencies {
 	
 	// 커넥트J
 	runtimeOnly 'com.mysql:mysql-connector-j'
+	
+	// 스프링부트 시큐리티
+	implementation 'org.springframework.security:spring-security-crypto'
 }
 
 tasks.named('test') {

@@ -33,6 +33,12 @@
 		  from user_tb
 		 where username = #{username}
 		   and password = #{password}
+	</select>	
+	
+	<select id="findByUsername" resultType="com.tencoding.bank.repository.model.User">
+		select id, username, password, fullname, created_at
+		  from user_tb
+		 where username = #{username}
 	</select>
 	
 	<select id="findAll">
