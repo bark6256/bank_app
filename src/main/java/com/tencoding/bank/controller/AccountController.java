@@ -20,7 +20,6 @@ import com.tencoding.bank.dto.HistoryDto;
 import com.tencoding.bank.dto.TransferFormDto;
 import com.tencoding.bank.dto.WithdrawFormDto;
 import com.tencoding.bank.hendler.exception.CustomRestfullException;
-import com.tencoding.bank.hendler.exception.UnAuthorizedException;
 import com.tencoding.bank.repository.model.Account;
 import com.tencoding.bank.repository.model.User;
 import com.tencoding.bank.service.AccountService;
@@ -39,11 +38,7 @@ public class AccountController {
 	// http://localhost:80/account/list
 	@GetMapping("/list")
 	public String list(Model model) {
-		// 1. 인증 여부 확인
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if(principal == null) {
-			throw new UnAuthorizedException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
-		}
 		
 		List<Account> accountList = accountService.readAccountList(principal.getId());
 		if(accountList.isEmpty()) {
@@ -59,11 +54,6 @@ public class AccountController {
 	// http://localhost:80/account/save
 	@GetMapping("/save")
 	public String save() {
-		// 1. 인증 여부 확인
-		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if(principal == null) {
-			throw new UnAuthorizedException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
-		}
 		return "account/save";
 	}
 	
@@ -73,12 +63,8 @@ public class AccountController {
 	 */
 	@PostMapping("/save")
 	public String saveProc(AccountSaveFormDto accountSaveFormDto) {
-		// 1. 인증 여부 확인
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if(principal == null) {
-			throw new UnAuthorizedException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
-		}
-		// 2. 유효성 검사
+		// 유효성 검사
 		if(accountSaveFormDto.getNumber() == null || accountSaveFormDto.getNumber().isEmpty()) {
 			throw new CustomRestfullException("계좌 번호를 입력해 주세요", HttpStatus.BAD_REQUEST);
 		}
@@ -97,11 +83,6 @@ public class AccountController {
 	// http://localhost:80/account/withdraw
 	@GetMapping("/withdraw")
 	public String withdraw() {
-		// 1. 인증 여부 확인
-		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if(principal == null) {
-			throw new UnAuthorizedException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
-		}
 		return "account/withdraw";
 	}
 	
@@ -111,12 +92,8 @@ public class AccountController {
 	 */
 	@PostMapping("/withdraw")
 	public String withdrawProc(WithdrawFormDto withdrawFormDto) {
-		// 1. 인증 여부 확인
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if(principal == null) {
-			throw new UnAuthorizedException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
-		}
-		// 2. 유효성 검사
+		// 유효성 검사
 		if(withdrawFormDto.getAmount() == null) {
 			throw new CustomRestfullException("금액을 입력해야 합니다", HttpStatus.BAD_REQUEST);
 		}
@@ -139,12 +116,7 @@ public class AccountController {
 	// http://localhost:80/account/deposit
 	@GetMapping("/deposit")
 	public String deposit(Model model) {
-		// 1. 인증 여부 확인
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if(principal == null) {
-			throw new UnAuthorizedException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
-		}
-
 		// 계좌 목록
 		List<Account> accountList = accountService.readAccountList(principal.getId());
 		if(accountList.isEmpty()) {
@@ -162,12 +134,7 @@ public class AccountController {
 	 */
 	@PostMapping("/deposit")
 	public String depositProc(DepositFormDto depositFormDto) {
-		// 1. 인증 여부 확인
-		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if(principal == null) {
-			throw new UnAuthorizedException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
-		}
-		// 2. 유효성 검사
+		// 유효성 검사
 		if(depositFormDto.getAmount() == null) {
 			throw new CustomRestfullException("금액을 입력해야 합니다", HttpStatus.BAD_REQUEST);
 		}
@@ -182,26 +149,22 @@ public class AccountController {
 		
 		return "redirect:/account/list";
 	}
-	// 계좌이체 페이지
+	// 계좌 이체 페이지
 	// http://localhost:80/account/transfer
 	@GetMapping("/transfer")
 	public String transfer() {
-		// 1. 인증 여부 확인
-		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if(principal == null) {
-			throw new UnAuthorizedException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
-		}
 		return "account/transfer";
 	}
 	
+	/**
+	 * 계좌 이체 기능
+	 * @param transferFormDto
+	 * @return 계좌 목록 페이지
+	 */
 	@PostMapping("/transfer")
 	public String transferProc(TransferFormDto transferFormDto) {
-		// 1. 인증 여부 확인
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if(principal == null) {
-			throw new UnAuthorizedException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
-		}
-		// 2. 유효성 검사
+		// 유효성 검사
 		if(transferFormDto.getAmount() == null) {
 			throw new CustomRestfullException("금액을 입력해야 합니다", HttpStatus.BAD_REQUEST);
 		}
@@ -228,13 +191,7 @@ public class AccountController {
 	@GetMapping("/detail/{id}")
 	public String detail(@PathVariable Integer id, @RequestParam(name = "type", defaultValue = "all", required = false) String type,
 			Model model) {
-		// 1. 인증 여부 확인
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if(principal == null) {
-			throw new UnAuthorizedException("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
-		}
-		
-		// 서비스 호출
 		// 계좌 정보 호출
 		Account account = accountService.readAccount(id);
 		// 계좌가 본인 계좌인지 확인
@@ -245,7 +202,6 @@ public class AccountController {
 		model.addAttribute("principal", principal);
 		model.addAttribute("account", account);
 		model.addAttribute("historyList", historyList);
-		System.out.println(historyList);
 		return "account/detail";
 	}
 }

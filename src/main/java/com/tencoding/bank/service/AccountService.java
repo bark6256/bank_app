@@ -17,7 +17,6 @@ import com.tencoding.bank.repository.interfaces.AccountRepository;
 import com.tencoding.bank.repository.interfaces.HistoryRepository;
 import com.tencoding.bank.repository.model.Account;
 import com.tencoding.bank.repository.model.History;
-import com.tencoding.bank.repository.model.User;
 
 @Service
 public class AccountService {

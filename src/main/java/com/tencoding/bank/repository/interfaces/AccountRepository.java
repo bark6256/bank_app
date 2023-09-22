@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.tencoding.bank.dto.AccountSaveFormDto;
 import com.tencoding.bank.repository.model.Account;
 
 @Mapper
