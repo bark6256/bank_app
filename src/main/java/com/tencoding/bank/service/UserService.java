@@ -48,4 +48,8 @@ public class UserService {
 		
 		return userEntity;
 	}
+	
+	public User searchUsername(String username) {
+		return userRepository.findByUsername(username);
+	}
 }

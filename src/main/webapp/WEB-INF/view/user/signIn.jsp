@@ -19,6 +19,8 @@
 				        id="pwd" name="password" value="1234">
 			</div>
 			<button type="submit" class="btn btn-primary">Login</button>
+			<a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=891be07cd472112a139584ce6aec7832&redirect_uri=http://localhost:80/user/kakao/callback">
+			<img alt="카카오 로그인" src="/images/kakao_login_small.png" width="74" height="38"> </a>
 		</form>
 	</div>
 </div>
