@@ -108,8 +108,9 @@ public class UserController {
 	
 	@GetMapping("/kakao/callback")
 	public String kakaoCallback(@RequestParam String code) {
-		RestTemplate rt = new RestTemplate();
+		// code = 인가 코드
 		// POST 방식 - exchange() 활용
+		RestTemplate rt = new RestTemplate();
 		// header 구성
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -120,12 +121,11 @@ public class UserController {
 		params.add("redirect_uri", "http://localhost:80/user/kakao/callback");
 		params.add("code", code);
 		
-		// header + body 결합
+		// header + body 결합 - HttpMessage
 		HttpEntity<MultiValueMap<String, String>> reqMes 
 			= new HttpEntity<>(params, headers);
 		
-		// http 요청 - 엑세스 토큰
-		// dto 파싱
+		// http 요청 - 엑세스 토큰 요청
 		ResponseEntity<OAuthToken> response 
 			= rt.exchange("https://kauth.kakao.com/oauth/token", HttpMethod.POST
 						, reqMes, OAuthToken.class);
@@ -140,7 +140,9 @@ public class UserController {
 		// 헤더 바디 결합
 		HttpEntity<MultiValueMap<String, String>> kakaoInfo 
 			= new HttpEntity<>(headers2);
-		ResponseEntity<KakaoProfile> response2 = rt2.exchange("https://kapi.kakao.com/v2/user/me", HttpMethod.POST, kakaoInfo, KakaoProfile.class);
+		ResponseEntity<KakaoProfile> response2 
+			= rt2.exchange("https://kapi.kakao.com/v2/user/me", HttpMethod.POST
+						, kakaoInfo, KakaoProfile.class);
 		// Service 구성
 		// - 최초 사용자일 경우 회원가입 처리
 		// username - 동일한 값이 저장되지 않도록 처리를 해야한다
